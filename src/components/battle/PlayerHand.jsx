@@ -65,7 +65,7 @@ function HandCard({ card, isSelected, isMyTurn, onClick }) {
       ) : (
         <div className={`w-full h-28 bg-gradient-to-b ${bg} flex flex-col items-center justify-center p-2`}>
           <span className="text-2xl mb-1">
-            {def.supertype === "Pokémon" ? "🎴" : def.supertype === "Trainer" ? "📜" : "⚡"}
+            {def.supertype === "Pokémon" ? "PKM" : def.supertype === "Trainer" ? "TRN" : "NRG"}
           </span>
           <p className="text-white text-[9px] font-body text-center leading-tight">{def.name}</p>
           {def.hp && <p className="text-white/60 text-[8px] mt-0.5">{def.hp} HP</p>}

@@ -128,7 +128,8 @@ export function getCardsByIds(cardIds = []) {
 }
 
 export function getTypeStyle(type) {
-  return TYPE_COLORS[type] || TYPE_COLORS.colorless;
+  const t = (type || "colorless").toLowerCase();
+  return TYPE_COLORS[t] || TYPE_COLORS.colorless;
 }
 
 export function getPokemonCards() {

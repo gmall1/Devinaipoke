@@ -1,13 +1,13 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, Layers, FolderOpen, Swords, Users } from "lucide-react";
+import { Home, Layers, FolderOpen, Swords, Users, Settings } from "lucide-react";
 
 const navItems = [
   { path: "/", icon: Home, label: "Home" },
   { path: "/collection", icon: Layers, label: "Cards" },
   { path: "/decks", icon: FolderOpen, label: "Decks" },
   { path: "/lobby", icon: Users, label: "Play" },
-  { path: "/battle", icon: Swords, label: "Battle" },
+  { path: "/admin", icon: Settings, label: "Admin" },
 ];
 
 export default function BottomNav() {

@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { getTypeInfo } from "@/lib/tcgdex";
-import { tcgdex } from "@/lib/tcgdex";
+import { TypeIcon, TYPE_META } from "@/lib/typeIcons";
 
 export default function BattleHand({ hand, onCardClick, selectedUid, isMyTurn }) {
   if (!hand || hand.length === 0) return (
@@ -11,7 +10,7 @@ export default function BattleHand({ hand, onCardClick, selectedUid, isMyTurn })
   return (
     <div className="px-3 py-2">
       <div className="flex gap-1.5 overflow-x-auto pb-1 justify-start">
-        {hand.map((battleCard) => (
+        {hand.map(battleCard => (
           <HandCard
             key={battleCard.uid}
             battleCard={battleCard}
@@ -27,8 +26,15 @@ export default function BattleHand({ hand, onCardClick, selectedUid, isMyTurn })
 
 function HandCard({ battleCard, onClick, selected, disabled }) {
   const { card } = battleCard;
-  const typeInfo = getTypeInfo(card.types?.[0] || (card.name?.includes("Energy") ? card.name.split(" ")[0] : null));
-  const imgUrl = card.image ? tcgdex.cardThumb(card) : null;
+  const typeKey = (card.types?.[0] || card.energy_type || "colorless").toLowerCase();
+  const meta = TYPE_META[typeKey] || TYPE_META.colorless;
+  const imgUrl = card.image ? `${card.image}/low.webp` : (card.imageSmall || card.image_small || null);
+
+  const superLabel = card.supertype === "Pokémon" || card.category === "Pokemon"
+    ? "PKM"
+    : card.supertype === "Trainer" || card.category === "Trainer"
+    ? "TRN"
+    : "NRG";
 
   return (
     <motion.div
@@ -36,17 +42,17 @@ function HandCard({ battleCard, onClick, selected, disabled }) {
       whileTap={!disabled ? { scale: 0.97 } : {}}
       onClick={onClick}
       className={`flex-shrink-0 w-16 h-24 rounded-lg overflow-hidden relative cursor-pointer
-        ${selected ? "ring-2 ring-accent ring-offset-1 ring-offset-background" : ""}
+        ${selected ? "ring-2 ring-primary ring-offset-1 ring-offset-background" : ""}
         ${disabled ? "opacity-60" : ""}`}
     >
-      <div className={`absolute inset-0 bg-gradient-to-br ${typeInfo.bg}`} />
+      <div className={`absolute inset-0 bg-gradient-to-br ${meta.bg}`} />
       {imgUrl ? (
         <img src={imgUrl} alt={card.name} className="absolute inset-0 w-full h-full object-cover" />
       ) : (
         <div className="relative h-full flex flex-col items-center justify-between p-1.5">
           <span className="text-white text-[9px] font-body font-bold leading-tight text-center line-clamp-2">{card.name}</span>
-          <span className="text-2xl opacity-70">{typeInfo.icon}</span>
-          <span className="text-white/60 text-[8px] font-body capitalize">{card.category}</span>
+          <TypeIcon type={typeKey} size={24} />
+          <span className="text-white/60 text-[8px] font-display tracking-wider">{superLabel}</span>
         </div>
       )}
     </motion.div>

@@ -10,6 +10,7 @@ import Decks from "@/pages/Decks";
 import DeckBuilder from "@/pages/DeckBuilder";
 import Lobby from "@/pages/Lobby";
 import Battle from "@/pages/Battle";
+import Admin from "@/pages/Admin";
 
 function AppRoutes() {
   return (
@@ -20,6 +21,7 @@ function AppRoutes() {
       <Route path="/deck-builder" element={<DeckBuilder />} />
       <Route path="/lobby" element={<Lobby />} />
       <Route path="/battle" element={<Battle />} />
+      <Route path="/admin" element={<Admin />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

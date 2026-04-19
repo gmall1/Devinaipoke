@@ -33,16 +33,16 @@ export default function CardFilter({ search, onSearchChange, typeFilter, onTypeC
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">All Energy</SelectItem>
-          <SelectItem value="fire">🔥 Fire</SelectItem>
-          <SelectItem value="water">💧 Water</SelectItem>
-          <SelectItem value="grass">🌿 Grass</SelectItem>
-          <SelectItem value="electric">⚡ Electric</SelectItem>
-          <SelectItem value="psychic">🔮 Psychic</SelectItem>
-          <SelectItem value="fighting">👊 Fighting</SelectItem>
-          <SelectItem value="dark">🌑 Dark</SelectItem>
-          <SelectItem value="steel">🛡️ Steel</SelectItem>
-          <SelectItem value="dragon">🐉 Dragon</SelectItem>
-          <SelectItem value="colorless">⚪ Colorless</SelectItem>
+          <SelectItem value="fire">Fire</SelectItem>
+          <SelectItem value="water">Water</SelectItem>
+          <SelectItem value="grass">Grass</SelectItem>
+          <SelectItem value="electric">Electric</SelectItem>
+          <SelectItem value="psychic">Psychic</SelectItem>
+          <SelectItem value="fighting">Fighting</SelectItem>
+          <SelectItem value="dark">Dark</SelectItem>
+          <SelectItem value="steel">Steel</SelectItem>
+          <SelectItem value="dragon">Dragon</SelectItem>
+          <SelectItem value="colorless">Colorless</SelectItem>
         </SelectContent>
       </Select>
     </div>

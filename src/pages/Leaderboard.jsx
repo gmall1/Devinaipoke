@@ -13,7 +13,7 @@ const TIER_COLORS = {
 };
 
 const TIER_ICONS = {
-  Master: "👑", Diamond: "💎", Platinum: "🔷", Gold: "🥇", Silver: "🥈", Bronze: "🥉",
+  Master: "", Diamond: "", Platinum: "", Gold: "", Silver: "", Bronze: "",
 };
 
 export default function Leaderboard() {
@@ -38,7 +38,7 @@ export default function Leaderboard() {
                 ${i === 0 ? "border-yellow-500/40 bg-yellow-500/5" : i === 1 ? "border-slate-400/30" : i === 2 ? "border-orange-600/30" : ""}`}>
                 <div className="w-8 text-center">
                   {i < 3 ? (
-                    <span className="text-xl">{["🥇","🥈","🥉"][i]}</span>
+                    <span className="text-xl">{["","",""][i]}</span>
                   ) : (
                     <span className="text-muted-foreground font-display text-sm font-bold">#{i + 1}</span>
                   )}

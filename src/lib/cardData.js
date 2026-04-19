@@ -1,19 +1,16 @@
-// Pre-built card database for the TCG app
-// This provides default cards when the database is empty
-
 const TYPE_COLORS = {
-  fire: { bg: "from-orange-600 to-red-700", text: "text-orange-400", icon: "🔥" },
-  water: { bg: "from-blue-500 to-cyan-700", text: "text-blue-400", icon: "💧" },
-  grass: { bg: "from-green-500 to-emerald-700", text: "text-green-400", icon: "🌿" },
-  electric: { bg: "from-yellow-400 to-amber-600", text: "text-yellow-400", icon: "⚡" },
-  psychic: { bg: "from-purple-500 to-pink-600", text: "text-purple-400", icon: "🔮" },
-  fighting: { bg: "from-orange-700 to-red-900", text: "text-orange-300", icon: "👊" },
-  dark: { bg: "from-gray-700 to-gray-900", text: "text-gray-400", icon: "🌑" },
-  steel: { bg: "from-slate-400 to-slate-600", text: "text-slate-300", icon: "🛡️" },
-  fairy: { bg: "from-pink-400 to-rose-600", text: "text-pink-400", icon: "✨" },
-  dragon: { bg: "from-indigo-600 to-violet-800", text: "text-indigo-400", icon: "🐉" },
-  normal: { bg: "from-gray-400 to-gray-600", text: "text-gray-300", icon: "⭐" },
-  colorless: { bg: "from-gray-300 to-gray-500", text: "text-gray-300", icon: "⚪" },
+  fire:       { bg: "from-red-700 to-orange-900",    text: "text-red-400",     abbr: "F"  },
+  water:      { bg: "from-blue-600 to-blue-900",     text: "text-blue-400",    abbr: "W"  },
+  grass:      { bg: "from-green-600 to-emerald-900", text: "text-green-400",   abbr: "G"  },
+  electric:   { bg: "from-yellow-500 to-amber-800",  text: "text-yellow-400",  abbr: "L"  },
+  psychic:    { bg: "from-purple-600 to-purple-900", text: "text-purple-400",  abbr: "P"  },
+  fighting:   { bg: "from-red-800 to-red-950",       text: "text-orange-300",  abbr: "FG" },
+  dark:       { bg: "from-gray-700 to-gray-950",     text: "text-gray-400",    abbr: "D"  },
+  steel:      { bg: "from-slate-500 to-slate-800",   text: "text-slate-300",   abbr: "M"  },
+  fairy:      { bg: "from-pink-500 to-rose-800",     text: "text-pink-400",    abbr: "Y"  },
+  dragon:     { bg: "from-indigo-600 to-violet-950", text: "text-indigo-400",  abbr: "N"  },
+  normal:     { bg: "from-slate-500 to-slate-700",   text: "text-gray-300",    abbr: "C"  },
+  colorless:  { bg: "from-slate-500 to-slate-700",   text: "text-gray-300",    abbr: "C"  },
 };
 
 const SAMPLE_CARDS = [
@@ -37,16 +34,14 @@ const SAMPLE_CARDS = [
   { name: "Sylveon VMAX", card_type: "pokemon", hp: 310, energy_type: "psychic", stage: "vmax", rarity: "ultra_rare", set_name: "Evolving Skies", attack1_name: "Precious Touch", attack1_damage: 60, attack1_cost: 1, attack2_name: "Max Harmony", attack2_damage: 160, attack2_cost: 3, weakness: "steel", retreat_cost: 2 },
   { name: "Magikarp", card_type: "pokemon", hp: 30, energy_type: "water", stage: "basic", rarity: "common", set_name: "Base Set", attack1_name: "Splash", attack1_damage: 10, attack1_cost: 1, weakness: "electric", retreat_cost: 1 },
   { name: "Gyarados EX", card_type: "pokemon", hp: 340, energy_type: "water", stage: "ex", rarity: "ultra_rare", set_name: "Paldea Evolved", attack1_name: "Tyrannical Tail", attack1_damage: 180, attack1_cost: 3, attack2_name: "Rampaging Whirlpool", attack2_damage: 300, attack2_cost: 5, weakness: "electric", retreat_cost: 4 },
-  // Trainer cards
   { name: "Professor's Research", card_type: "trainer", rarity: "uncommon", set_name: "Scarlet & Violet", description: "Discard your hand and draw 7 cards." },
-  { name: "Boss's Orders", card_type: "trainer", rarity: "rare", set_name: "Rebel Clash", description: "Switch 1 of your opponent's Benched Pokémon with their Active Pokémon." },
-  { name: "Ultra Ball", card_type: "trainer", rarity: "uncommon", set_name: "Sun & Moon", description: "Discard 2 cards from your hand. Search your deck for a Pokémon and put it into your hand." },
-  { name: "Rare Candy", card_type: "trainer", rarity: "uncommon", set_name: "Scarlet & Violet", description: "Choose 1 of your Basic Pokémon in play. Search your deck for a Stage 2 card that evolves from that Pokémon and put it onto that Pokémon to evolve it." },
-  { name: "Switch", card_type: "trainer", rarity: "common", set_name: "Base Set", description: "Switch your Active Pokémon with 1 of your Benched Pokémon." },
-  { name: "Nest Ball", card_type: "trainer", rarity: "common", set_name: "Sun & Moon", description: "Search your deck for a Basic Pokémon and put it onto your Bench." },
-  { name: "Battle VIP Pass", card_type: "trainer", rarity: "uncommon", set_name: "Fusion Strike", description: "You can only use this card during your first turn. Search your deck for up to 2 Basic Pokémon and put them onto your Bench." },
+  { name: "Boss's Orders", card_type: "trainer", rarity: "rare", set_name: "Rebel Clash", description: "Switch 1 of your opponent's Benched Pokemon with their Active Pokemon." },
+  { name: "Ultra Ball", card_type: "trainer", rarity: "uncommon", set_name: "Sun & Moon", description: "Discard 2 cards from your hand. Search your deck for a Pokemon and put it into your hand." },
+  { name: "Rare Candy", card_type: "trainer", rarity: "uncommon", set_name: "Scarlet & Violet", description: "Choose 1 of your Basic Pokemon in play. Search your deck for a Stage 2 card that evolves from that Pokemon and put it onto that Pokemon to evolve it." },
+  { name: "Switch", card_type: "trainer", rarity: "common", set_name: "Base Set", description: "Switch your Active Pokemon with 1 of your Benched Pokemon." },
+  { name: "Nest Ball", card_type: "trainer", rarity: "common", set_name: "Sun & Moon", description: "Search your deck for a Basic Pokemon and put it onto your Bench." },
+  { name: "Battle VIP Pass", card_type: "trainer", rarity: "uncommon", set_name: "Fusion Strike", description: "You can only use this card during your first turn. Search your deck for up to 2 Basic Pokemon and put them onto your Bench." },
   { name: "Iono", card_type: "trainer", rarity: "rare", set_name: "Paldea Evolved", description: "Each player shuffles their hand into their deck and draws a card for each of their remaining Prize cards." },
-  // Energy cards
   { name: "Fire Energy", card_type: "energy", energy_type: "fire", rarity: "common", set_name: "Base Set" },
   { name: "Water Energy", card_type: "energy", energy_type: "water", rarity: "common", set_name: "Base Set" },
   { name: "Grass Energy", card_type: "energy", energy_type: "grass", rarity: "common", set_name: "Base Set" },

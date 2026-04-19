@@ -51,7 +51,7 @@ export default function BattleControls({ gs, myKey, isMyTurn, actionMode, onAtta
             </span>
             <span className="font-display font-bold text-sm">
               {atk.damage ? atk.damage : "—"}
-              <span className="text-xs opacity-60 ml-2">⚡{atk.convertedEnergyCost}</span>
+              <span className="text-xs opacity-60 ml-2 font-mono">{atk.convertedEnergyCost}E</span>
             </span>
           </Button>
         );

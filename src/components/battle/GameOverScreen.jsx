@@ -21,7 +21,7 @@ export default function GameOverScreen({ won, gs, myKey, onRematch, onLeave }) {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-7xl mb-5"
         >
-          {won ? "🏆" : "💀"}
+          {won ? "WIN" : "KO"}
         </motion.div>
 
         <h1 className="font-display text-3xl font-black mb-2">

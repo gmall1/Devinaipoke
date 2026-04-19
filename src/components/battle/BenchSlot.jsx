@@ -1,43 +1,66 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { TypeIcon, StatusBadge, TYPE_META } from "@/lib/typeIcons";
 
-export default function BenchSlot({ pokemon, isOpponent, isMyTurn, onClick, size = "sm" }) {
-  if (!pokemon) return null;
-  const type = pokemon.def.types?.[0];
-  const typeColors = {
-    Fire: "from-orange-700 to-red-800", Water: "from-blue-600 to-cyan-800",
-    Grass: "from-green-600 to-emerald-800", Lightning: "from-yellow-500 to-amber-700",
-    Psychic: "from-purple-600 to-pink-700", Fighting: "from-orange-800 to-red-900",
-    Darkness: "from-gray-700 to-gray-900", Metal: "from-slate-500 to-slate-700",
-    Dragon: "from-indigo-700 to-violet-900", Colorless: "from-gray-500 to-gray-700",
-  };
-  const bg = typeColors[type] || typeColors.Colorless;
-  const hpPct = pokemon.def.hp ? Math.max(0, ((pokemon.def.hp - pokemon.damage) / pokemon.def.hp) * 100) : 100;
-  const energyCount = pokemon.energyAttached?.length || 0;
+export default function BenchSlot({ pokemon, index, onClick, isMyTurn, isEmpty }) {
+  if (isEmpty || !pokemon) {
+    return (
+      <div className="w-14 h-20 rounded-xl border border-dashed border-border/40 flex items-center justify-center opacity-30">
+        <span className="text-[9px] text-muted-foreground font-body">{index + 1}</span>
+      </div>
+    );
+  }
+
+  const typeKey = (
+    pokemon.def?.types?.[0] ||
+    pokemon.def?.energy_type ||
+    pokemon.card?.types?.[0] ||
+    "colorless"
+  ).toLowerCase();
+  const meta = TYPE_META[typeKey] || TYPE_META.colorless;
+  const hp = pokemon.def?.hp ? Number(pokemon.def.hp) : (pokemon.hp || 100);
+  const damage = pokemon.damage || 0;
+  const hpPct = Math.max(0, Math.min(100, ((hp - damage) / hp) * 100));
+  const energyCount = (pokemon.energyAttached || pokemon.energies || []).length;
+  const imgUrl = pokemon.def?.imageSmall || pokemon.def?.image_small || pokemon.card?.imageSmall || null;
 
   return (
     <motion.div
-      whileHover={onClick && isMyTurn ? { scale: 1.05 } : {}}
+      whileHover={isMyTurn && onClick ? { scale: 1.08 } : { scale: 1.02 }}
+      whileTap={{ scale: 0.96 }}
       onClick={onClick}
-      className={`w-[52px] h-[70px] rounded-lg overflow-hidden cursor-pointer bg-gradient-to-b ${bg} flex flex-col
-        border ${isMyTurn && !isOpponent ? "border-primary/30 hover:border-primary" : "border-white/10"}`}
+      className={`w-14 h-20 rounded-xl overflow-hidden relative cursor-pointer flex-shrink-0
+        ${isMyTurn && onClick ? "ring-1 ring-primary/40" : ""}`}
     >
-      {pokemon.def.imageSmall ? (
-        <img src={pokemon.def.imageSmall} alt={pokemon.def.name} className="flex-1 object-contain p-0.5" />
-      ) : (
-        <div className="flex-1 flex items-center justify-center text-xl opacity-70">
-          {["🔥","💧","🌿","⚡","🔮","👊","🌑","🛡️","🐉","⭐"][
-            ["Fire","Water","Grass","Lightning","Psychic","Fighting","Darkness","Metal","Dragon","Colorless"].indexOf(type) ?? 9
-          ]}
+      <div className={`absolute inset-0 bg-gradient-to-br ${meta.bg}`} />
+
+      <div className="relative h-full flex flex-col">
+        {imgUrl ? (
+          <img src={imgUrl} alt={pokemon.def?.name || pokemon.card?.name} className="w-full h-full object-cover" />
+        ) : (
+          <div className="flex-1 flex items-center justify-center">
+            <TypeIcon type={typeKey} size={22} />
+          </div>
+        )}
+
+        <div className="absolute bottom-0 left-0 right-0 bg-black/60 px-1 py-0.5">
+          <div className="h-1 bg-black/40 rounded-full overflow-hidden">
+            <div
+              className={`h-full rounded-full ${hpPct > 50 ? "bg-green-400" : hpPct > 20 ? "bg-yellow-400" : "bg-red-400"}`}
+              style={{ width: `${hpPct}%` }}
+            />
+          </div>
+          {energyCount > 0 && (
+            <div className="text-center text-[8px] text-white/60 mt-0.5 font-display">{energyCount}E</div>
+          )}
         </div>
-      )}
-      <div className="h-1 bg-black/40 mx-1 mb-1 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full ${hpPct > 50 ? "bg-green-400" : hpPct > 20 ? "bg-yellow-400" : "bg-red-400"}`}
-          style={{ width: `${hpPct}%` }} />
+
+        {pokemon.specialCondition && (
+          <div className="absolute top-0.5 left-0.5">
+            <StatusBadge condition={pokemon.specialCondition} />
+          </div>
+        )}
       </div>
-      {energyCount > 0 && (
-        <div className="text-center text-[9px] text-white/60 mb-0.5">{energyCount}⚡</div>
-      )}
     </motion.div>
   );
 }

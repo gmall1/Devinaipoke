@@ -48,17 +48,17 @@ export const tcgdex = {
 
 // Type color map matching TCG colors
 export const TYPE_COLORS = {
-  Fire:      { bg: "from-orange-500 to-red-700",    badge: "bg-red-500",    icon: "🔥" },
-  Water:     { bg: "from-blue-400 to-blue-700",     badge: "bg-blue-500",   icon: "💧" },
-  Grass:     { bg: "from-green-400 to-emerald-700", badge: "bg-green-500",  icon: "🌿" },
-  Lightning: { bg: "from-yellow-300 to-amber-600",  badge: "bg-yellow-400", icon: "⚡" },
-  Psychic:   { bg: "from-purple-500 to-purple-800", badge: "bg-purple-500", icon: "🔮" },
-  Fighting:  { bg: "from-orange-700 to-red-900",   badge: "bg-orange-700", icon: "👊" },
-  Darkness:  { bg: "from-gray-700 to-gray-900",    badge: "bg-gray-700",   icon: "🌑" },
-  Metal:     { bg: "from-slate-400 to-slate-600",  badge: "bg-slate-500",  icon: "🛡️" },
-  Fairy:     { bg: "from-pink-400 to-rose-600",    badge: "bg-pink-500",   icon: "✨" },
-  Dragon:    { bg: "from-indigo-500 to-violet-800",badge: "bg-indigo-600", icon: "🐉" },
-  Colorless: { bg: "from-gray-400 to-gray-600",    badge: "bg-gray-500",   icon: "⭐" },
+  Fire:      { bg: "from-orange-500 to-red-700",    badge: "bg-red-500" },
+  Water:     { bg: "from-blue-400 to-blue-700",     badge: "bg-blue-500" },
+  Grass:     { bg: "from-green-400 to-emerald-700", badge: "bg-green-500" },
+  Lightning: { bg: "from-yellow-300 to-amber-600",  badge: "bg-yellow-400" },
+  Psychic:   { bg: "from-purple-500 to-purple-800", badge: "bg-purple-500" },
+  Fighting:  { bg: "from-orange-700 to-red-900",   badge: "bg-orange-700" },
+  Darkness:  { bg: "from-gray-700 to-gray-900",    badge: "bg-gray-700" },
+  Metal:     { bg: "from-slate-400 to-slate-600",  badge: "bg-slate-500" },
+  Fairy:     { bg: "from-pink-400 to-rose-600",    badge: "bg-pink-500" },
+  Dragon:    { bg: "from-indigo-500 to-violet-800",badge: "bg-indigo-600" },
+  Colorless: { bg: "from-gray-400 to-gray-600",    badge: "bg-gray-500" },
 };
 
 export function getTypeInfo(type) {
@@ -67,9 +67,9 @@ export function getTypeInfo(type) {
 
 // Special condition icons
 export const CONDITIONS = {
-  poisoned:   { label: "Poisoned",   icon: "☠️",  color: "bg-purple-700" },
-  burned:     { label: "Burned",     icon: "🔥",  color: "bg-red-700" },
-  confused:   { label: "Confused",   icon: "🌀",  color: "bg-pink-700" },
-  paralyzed:  { label: "Paralyzed",  icon: "⚡",  color: "bg-yellow-600" },
-  asleep:     { label: "Asleep",     icon: "💤",  color: "bg-blue-700" },
+  poisoned:   { label: "Poisoned",  color: "bg-purple-700" },
+  burned:     { label: "Burned",  color: "bg-red-700" },
+  confused:   { label: "Confused",  color: "bg-pink-700" },
+  paralyzed:  { label: "Paralyzed",  color: "bg-yellow-600" },
+  asleep:     { label: "Asleep",  color: "bg-blue-700" },
 };

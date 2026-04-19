@@ -9,7 +9,7 @@ export default function SetupPhase({ gs, myKey, onReady }) {
   return (
     <div className="fixed inset-0 bg-background flex flex-col items-center justify-center p-6">
       <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center w-full max-w-sm">
-        <div className="text-5xl mb-4">🃏</div>
+        <div className="w-12 h-12 rounded-xl bg-secondary mx-auto mb-4 flex items-center justify-center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="4" y="3" width="12" height="16" rx="2"/><rect x="8" y="7" width="12" height="16" rx="2" opacity="0.4"/></svg></div>
         <h2 className="font-display text-xl font-bold mb-1">Game Setup</h2>
         <p className="text-muted-foreground text-sm font-body mb-6">
           {gs.activePlayer === myKey ? "You go first!" : `${gs[gs.activePlayer].name} goes first.`}

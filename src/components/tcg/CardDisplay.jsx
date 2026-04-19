@@ -1,3 +1,4 @@
+import { TypeIcon } from "@/lib/typeIcons";
 import React from "react";
 import { motion } from "framer-motion";
 import { TYPE_COLORS } from "@/lib/cardData";
@@ -43,7 +44,7 @@ export default function CardDisplay({ card, size = "md", onClick, selected = fal
         {/* Type Icon / Art Area */}
         <div className="flex-1 flex items-center justify-center my-2">
           <div className="text-4xl opacity-60">
-            {card.card_type === "energy" ? typeInfo.icon : card.card_type === "trainer" ? "📜" : typeInfo.icon}
+            <TypeIcon type={card.energy_type || "colorless"} size={28} />
           </div>
         </div>
 

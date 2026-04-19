@@ -19,12 +19,12 @@ const TABS = [
 ];
 
 const TIER_STYLES = {
-  bronze: { color: "text-orange-400", bg: "bg-orange-400/10", icon: "🥉" },
-  silver: { color: "text-slate-300", bg: "bg-slate-300/10", icon: "🥈" },
-  gold: { color: "text-yellow-400", bg: "bg-yellow-400/10", icon: "🥇" },
-  platinum: { color: "text-cyan-300", bg: "bg-cyan-300/10", icon: "💎" },
-  diamond: { color: "text-blue-400", bg: "bg-blue-400/10", icon: "💠" },
-  master: { color: "text-purple-400", bg: "bg-purple-400/10", icon: "👑" },
+  bronze: { color: "text-orange-400", bg: "bg-orange-400/10", abbr: "BR" },
+  silver: { color: "text-slate-300", bg: "bg-slate-300/10", abbr: "SI" },
+  gold: { color: "text-yellow-400", bg: "bg-yellow-400/10", abbr: "GO" },
+  platinum: { color: "text-cyan-300", bg: "bg-cyan-300/10", abbr: "PL" },
+  diamond: { color: "text-blue-400", bg: "bg-blue-400/10", abbr: "DI" },
+  master: { color: "text-purple-400", bg: "bg-purple-400/10", abbr: "MA" },
 };
 
 export default function Lobby() {
@@ -125,7 +125,7 @@ export default function Lobby() {
 
         {myRank && (
           <div className={`rounded-2xl border border-border p-4 flex items-center gap-4 ${currentTier.bg}`}>
-            <span className="text-3xl">{currentTier.icon}</span>
+            <span className={`font-display text-xl font-black ${currentTier.color}`}>{currentTier.abbr}</span>
             <div className="flex-1">
               <p className="text-xs uppercase tracking-widest text-muted-foreground font-body">Current rank</p>
               <p className={`font-display text-lg font-bold capitalize ${currentTier.color}`}>{myRank.rank_tier}</p>
@@ -263,7 +263,7 @@ export default function Lobby() {
                 return (
                   <div key={entry.id} className="rounded-xl border border-border bg-background p-3 flex items-center gap-3">
                     <div className="w-8 text-center font-display font-bold text-muted-foreground">#{index + 1}</div>
-                    <div className="text-2xl">{tier.icon}</div>
+                    <div className={`font-display text-base font-black ${tier.color}`}>{tier.abbr}</div>
                     <div className="flex-1 min-w-0">
                       <p className="font-body font-semibold text-sm truncate">{entry.username}</p>
                       <p className="text-xs text-muted-foreground font-body">

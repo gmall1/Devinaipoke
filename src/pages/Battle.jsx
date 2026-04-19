@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Copy, Loader2, ShieldAlert, Sparkles, Swords, Trophy, Users, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TypeIcon, StatusBadge } from "@/lib/typeIcons";
 import { Badge } from "@/components/ui/badge";
 import db from "@/lib/localDb";
 import {
@@ -39,12 +40,12 @@ function hpColor(pct) {
 
 function conditionIcon(cond) {
   const map = {
-    poisoned:       { icon: "☠️", label: "Poisoned",       color: "bg-purple-700/80" },
-    badly_poisoned: { icon: "💀", label: "Badly Poisoned", color: "bg-purple-900/80" },
-    burned:         { icon: "🔥", label: "Burned",         color: "bg-orange-700/80" },
-    confused:       { icon: "🌀", label: "Confused",       color: "bg-pink-700/80"   },
-    paralyzed:      { icon: "⚡", label: "Paralyzed",      color: "bg-yellow-600/80" },
-    asleep:         { icon: "💤", label: "Asleep",         color: "bg-blue-700/80"   },
+    poisoned:       { label: "PSN",  color: "bg-purple-700/90" },
+    badly_poisoned: { label: "BPSN", color: "bg-purple-900/90" },
+    burned:         { label: "BRN",  color: "bg-red-700/90"    },
+    confused:       { label: "CNF",  color: "bg-pink-700/90"   },
+    paralyzed:      { label: "PAR",  color: "bg-yellow-600/90" },
+    asleep:         { label: "SLP",  color: "bg-blue-700/90"   },
   };
   return map[cond] || null;
 }
@@ -77,12 +78,14 @@ async function buildPlayerDef(name, cardIds) {
 }
 
 function ConditionBadge({ condition }) {
+  if (!condition) return null;
   const info = conditionIcon(condition);
   if (!info) return null;
   return (
     <motion.span initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-      className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-body text-white ${info.color}`}>
-      {info.icon} {info.label}
+      className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-display font-bold text-white tracking-wider ${info.color}`}>
+      <span className="w-1.5 h-1.5 rounded-full bg-white/60 inline-block" />
+      {info.label}
     </motion.span>
   );
 }
@@ -118,12 +121,12 @@ function PokemonCard({ playCard, isActivePlayer, isOpponent, lastDamage }) {
         <div className={`relative h-32 bg-gradient-to-br ${style.bg} flex items-center justify-center overflow-hidden`}>
           {imageUrl
             ? <img src={imageUrl} alt={def?.name} className="h-full w-auto object-contain drop-shadow-xl" loading="lazy" />
-            : <span className="text-5xl">{style.icon}</span>
+            : <TypeIcon type={def?.energy_type || (def?.types?.[0] || "colorless").toLowerCase()} size={52} />
           }
           {(playCard?.energyAttached?.length > 0) && (
             <div className="absolute bottom-2 left-2 flex gap-1">
               {playCard.energyAttached.slice(0, 5).map((_, i) => (
-                <span key={i} className="text-xs bg-black/40 rounded-full w-5 h-5 flex items-center justify-center">⚡</span>
+                <span key={i} className="bg-black/50 rounded-full w-5 h-5 flex items-center justify-center"><TypeIcon type="lightning" size={11} /></span>
               ))}
             </div>
           )}
@@ -177,9 +180,9 @@ function PlayerField({ playerState, isOpponent, isActivePlayer, lastDamage, labe
           )}
         </div>
         <div className="flex items-center gap-3 text-xs font-body text-muted-foreground">
-          <span title="Prizes taken">🏆 {6 - prizes}/6</span>
-          <span title="Hand size">✋ {hand}</span>
-          <span title="Deck remaining">📚 {deckLeft}</span>
+          <span className="text-[11px] font-body text-muted-foreground">Prize {6 - prizes}/6</span>
+          <span className="text-[11px] font-body text-muted-foreground">Hand {hand}</span>
+          <span className="text-[11px] font-body text-muted-foreground">Deck {deckLeft}</span>
         </div>
       </div>
 
@@ -201,13 +204,13 @@ function PlayerField({ playerState, isOpponent, isActivePlayer, lastDamage, labe
               <div key={b.instanceId} className="rounded-lg border border-border bg-card overflow-hidden">
                 <div className={`h-12 bg-gradient-to-br ${bs.bg} flex items-center justify-center`}>
                   {bImg ? <img src={bImg} alt={b.def?.name} className="h-full w-auto object-contain" loading="lazy" />
-                    : <span className="text-lg">{bs.icon}</span>}
+                    : <TypeIcon type={b.def?.energy_type || (b.def?.types?.[0] || "colorless").toLowerCase()} size={20} />}
                 </div>
                 <div className="h-1 bg-secondary">
                   <div className={`h-full bg-gradient-to-r ${hpColor(bPct)}`} style={{ width: `${bPct*100}%` }} />
                 </div>
                 {b.specialCondition && (
-                  <p className="text-[9px] text-center py-0.5">{conditionIcon(b.specialCondition)?.icon}</p>
+                  <div className="flex justify-center py-0.5"><StatusBadge condition={b.specialCondition} /></div>
                 )}
               </div>
             );
