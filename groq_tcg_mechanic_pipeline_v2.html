@@ -1,0 +1,592 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;display:flex;flex-direction:column;gap:14px;font-family:var(--font-sans)}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem}
+.sec{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+label{font-size:12px;color:var(--color-text-secondary);white-space:nowrap}
+input[type=text],input[type=number],select{font-size:12px;padding:5px 9px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary)}
+input[type=text]{flex:1;min-width:200px}
+.btn{font-size:12px;padding:5px 12px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--color-background-secondary)}
+.btn:active{transform:scale(.98)}
+.btn-p{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info);font-weight:500}
+.btn-p:hover{opacity:.85}
+.btn-w{background:var(--color-background-warning);color:var(--color-text-warning);border-color:var(--color-border-warning)}
+.btn-d{background:var(--color-background-danger);color:var(--color-text-danger);border-color:var(--color-border-danger)}
+.phases{display:flex;gap:6px;flex-wrap:wrap}
+.ph{font-size:11px;padding:3px 9px;border-radius:99px;background:var(--color-background-secondary);color:var(--color-text-secondary);border:.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:4px}
+.ph.active{background:var(--color-background-info);color:var(--color-text-info);border-color:var(--color-border-info)}
+.ph.done{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success)}
+.ph.err{background:var(--color-background-danger);color:var(--color-text-danger);border-color:var(--color-border-danger)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+@keyframes spin2{to{transform:rotate(360deg)}}
+.spin{animation:spin2 .9s linear infinite;border-radius:50%;border:2px solid currentColor;border-top-color:transparent;background:transparent!important;width:7px!important;height:7px!important}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:8px}
+.st{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px}
+.stl{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px}
+.stv{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+.log{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;font-size:11px;font-family:var(--font-mono);color:var(--color-text-secondary);height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:2px}
+.ll{line-height:1.5}
+.ll.info{color:var(--color-text-info)}
+.ll.ok{color:var(--color-text-success)}
+.ll.warn{color:var(--color-text-warning)}
+.ll.err{color:var(--color-text-danger)}
+.pbar{height:5px;background:var(--color-background-secondary);border-radius:99px;overflow:hidden}
+.pfill{height:100%;background:var(--color-background-info);border-radius:99px;transition:width .3s}
+.ml{display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto}
+.mi{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px 10px;border-left:3px solid var(--color-border-info)}
+.mn{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.mc{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.mc2{font-size:10px;font-family:var(--font-mono);color:var(--color-text-tertiary);margin-top:3px;white-space:pre-wrap;word-break:break-all;max-height:50px;overflow:hidden;cursor:pointer}
+.mc2.ex{max-height:none}
+.tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:99px}
+.t-new{background:var(--color-background-warning);color:var(--color-text-warning)}
+.t-ok{background:var(--color-background-success);color:var(--color-text-success)}
+.t-fail{background:var(--color-background-danger);color:var(--color-text-danger)}
+.t-code{background:var(--color-background-info);color:var(--color-text-info)}
+.exp{font-family:var(--font-mono);font-size:10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:8px;max-height:180px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;color:var(--color-text-secondary)}
+.ckpt{background:var(--color-background-warning);border:.5px solid var(--color-border-warning);border-radius:var(--border-radius-md);padding:8px 12px;font-size:12px;color:var(--color-text-warning)}
+</style>
+
+<div class="w">
+
+<div class="card">
+  <p class="sec">Configuration</p>
+  <div class="row" style="margin-bottom:8px">
+    <label>Groq key</label>
+    <input type="text" id="gKey" placeholder="gsk_..." />
+    <select id="mdl">
+      <option value="llama-3.3-70b-versatile">llama-3.3-70b</option>
+      <option value="llama3-70b-8192">llama3-70b-8k</option>
+      <option value="mixtral-8x7b-32768">mixtral-8x7b</option>
+    </select>
+  </div>
+  <div class="row">
+    <label>Cards/page</label><input type="number" id="cPP" value="60" min="10" max="250" style="width:60px">
+    <label>Max pages</label><input type="number" id="mPG" value="999" min="1" max="999" style="width:60px" title="999 = all cards">
+    <label>Delay (ms)</label><input type="number" id="dly" value="4500" min="1000" max="30000" style="width:70px" title="Delay between Groq calls. 4500ms = ~13 calls/min (safe for free tier)">
+    <label>Batch</label><input type="number" id="bSz" value="6" min="1" max="15" style="width:55px">
+  </div>
+  <p style="font-size:11px;color:var(--color-text-tertiary);margin-top:6px">Free Groq tier: ~30 req/min. 4500ms delay = safe. Increase delay if you see 429 errors.</p>
+</div>
+
+<div id="ckptBanner" class="ckpt" style="display:none">
+  Checkpoint found — <span id="ckptInfo"></span>. 
+  <button class="btn btn-w" id="resumeBtn" style="margin-left:8px">Resume from checkpoint</button>
+  <button class="btn" id="freshBtn" style="margin-left:4px">Start fresh</button>
+</div>
+
+<div class="card">
+  <p class="sec">Pipeline</p>
+  <div class="phases" id="phases">
+    <div class="ph" id="ph-fetch"><span class="dot"></span>1 Fetch all cards</div>
+    <div class="ph" id="ph-parse"><span class="dot"></span>2 Parse mechanics</div>
+    <div class="ph" id="ph-gen"><span class="dot"></span>3 Generate code</div>
+    <div class="ph" id="ph-test"><span class="dot"></span>4 Test</div>
+    <div class="ph" id="ph-export"><span class="dot"></span>5 Build resolveAttackText</div>
+  </div>
+  <div style="margin-top:10px">
+    <div class="pbar"><div class="pfill" id="pFill" style="width:0%"></div></div>
+    <p style="font-size:11px;color:var(--color-text-tertiary);margin-top:3px" id="pLbl">Ready</p>
+  </div>
+  <div class="row" style="margin-top:10px;gap:6px">
+    <button class="btn btn-p" id="runBtn">Run full pipeline</button>
+    <button class="btn" id="fetchOnlyBtn">Fetch cards only</button>
+    <button class="btn btn-d" id="stopBtn" style="display:none">Stop</button>
+    <button class="btn" id="clearBtn">Clear all</button>
+    <button class="btn" id="saveBtn" style="display:none" title="Save checkpoint now">Save checkpoint</button>
+  </div>
+</div>
+
+<div class="card">
+  <p class="sec">Live stats</p>
+  <div class="stats">
+    <div class="st"><div class="stl">Total cards</div><div class="stv" id="sTot">0</div></div>
+    <div class="st"><div class="stl">Pages done</div><div class="stv" id="sPg">0</div></div>
+    <div class="st"><div class="stl">Attacks read</div><div class="stv" id="sAtk">0</div></div>
+    <div class="st"><div class="stl">Mechanics</div><div class="stv" id="sMech">0</div></div>
+    <div class="st"><div class="stl">Code gen</div><div class="stv" id="sCode">0</div></div>
+    <div class="st"><div class="stl">Tests pass</div><div class="stv" id="sPass">0</div></div>
+    <div class="st"><div class="stl">Tests fail</div><div class="stv" id="sFail">0</div></div>
+    <div class="st"><div class="stl">Groq calls</div><div class="stv" id="sGroq">0</div></div>
+    <div class="st"><div class="stl">Rate errors</div><div class="stv" id="sRate">0</div></div>
+    <div class="st"><div class="stl">Queue left</div><div class="stv" id="sQ">0</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <p class="sec">Log</p>
+  <div class="log" id="logBox"></div>
+</div>
+
+<div class="card" id="mechSec" style="display:none">
+  <p class="sec">Discovered mechanics (<span id="mechCount">0</span>)</p>
+  <div class="ml" id="mechList"></div>
+</div>
+
+<div class="card" id="expSec" style="display:none">
+  <p class="sec">Generated resolveAttackText() — drop into gameEngine.js</p>
+  <div class="exp" id="expArea"></div>
+  <div class="row" style="margin-top:8px;gap:6px">
+    <button class="btn btn-p" id="copyBtn">Copy</button>
+    <button class="btn" id="dlBtn">Download .js</button>
+    <button class="btn" onclick="sendPrompt('I have a generated resolveAttackText patch from the Pokémon TCG mechanic pipeline. Please review it and help me integrate it cleanly into gameEngine.js')">Review with Claude ↗</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+const CKPT_KEY = 'tcg_mechanic_pipeline_v2';
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+let running = false;
+let st = {tot:0,pg:0,atk:0,mech:0,code:0,pass:0,fail:0,groq:0,rate:0,q:0};
+let allMechanics = [];
+let attackQueue = [];
+let checkpoint = null;
+
+function el(id){return document.getElementById(id)}
+function setSt(k,v){st[k]=v;const m={tot:'sTot',pg:'sPg',atk:'sAtk',mech:'sMech',code:'sCode',pass:'sPass',fail:'sFail',groq:'sGroq',rate:'sRate',q:'sQ'};if(m[k])el(m[k]).textContent=v}
+function incSt(k,n=1){setSt(k,st[k]+n)}
+
+function log(msg,type=''){
+  const box=el('logBox');
+  const line=document.createElement('div');
+  line.className='ll'+(type?' '+type:'');
+  const ts=new Date().toLocaleTimeString('en',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  line.textContent=`[${ts}] ${msg}`;
+  box.appendChild(line);
+  if(box.children.length>400)box.removeChild(box.firstChild);
+  box.scrollTop=box.scrollHeight;
+}
+
+function ph(id,state){
+  const e=el('ph-'+id);
+  e.className='ph '+(state||'');
+  const d=e.querySelector('.dot');
+  d.className='dot'+(state==='active'?' spin':'');
+}
+function prog(pct,lbl){el('pFill').style.width=pct+'%';el('pLbl').textContent=lbl}
+
+function saveCheckpoint(){
+  const data={
+    version:2,
+    savedAt:Date.now(),
+    st:{...st},
+    allMechanics:[...allMechanics],
+    attackQueue:[...attackQueue],
+    pagesComplete:st.pg,
+    totalPages:parseInt(el('mPG').value)||999
+  };
+  try{localStorage.setItem(CKPT_KEY,JSON.stringify(data));log('Checkpoint saved ('+allMechanics.length+' mechanics, '+attackQueue.length+' in queue)','ok')}
+  catch(e){log('Checkpoint save failed: '+e.message,'warn')}
+}
+
+function loadCheckpoint(){
+  try{
+    const raw=localStorage.getItem(CKPT_KEY);
+    if(!raw)return null;
+    return JSON.parse(raw);
+  }catch{return null}
+}
+
+function clearCheckpoint(){localStorage.removeItem(CKPT_KEY)}
+
+function checkForCheckpoint(){
+  const ck=loadCheckpoint();
+  if(!ck||!ck.savedAt)return;
+  const age=Math.round((Date.now()-ck.savedAt)/60000);
+  el('ckptInfo').textContent=`${ck.allMechanics?.length||0} mechanics, ${ck.attackQueue?.length||0} items in queue, saved ${age}m ago`;
+  el('ckptBanner').style.display='';
+  checkpoint=ck;
+}
+
+function restoreFromCheckpoint(ck){
+  allMechanics=[...(ck.allMechanics||[])];
+  attackQueue=[...(ck.attackQueue||[])];
+  Object.keys(ck.st||{}).forEach(k=>setSt(k,ck.st[k]));
+  setSt('q',attackQueue.length);
+  allMechanics.forEach(m=>renderMechanic(m,true));
+  log(`Restored from checkpoint: ${allMechanics.length} mechanics, ${attackQueue.length} in queue`,'ok');
+}
+
+async function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+
+async function groqCall(key,model,messages,retries=3){
+  incSt('groq');
+  for(let attempt=0;attempt<retries;attempt++){
+    try{
+      const resp=await fetch(GROQ_URL,{
+        method:'POST',
+        headers:{'Authorization':'Bearer '+key,'Content-Type':'application/json'},
+        body:JSON.stringify({model,messages,temperature:0.15,max_tokens:2000})
+      });
+      if(resp.status===429){
+        incSt('rate');
+        const wait=Math.pow(2,attempt+1)*3000;
+        log(`Rate limit hit (attempt ${attempt+1}/${retries}), waiting ${wait/1000}s...`,'warn');
+        await sleep(wait);
+        continue;
+      }
+      if(!resp.ok){
+        const txt=await resp.text();
+        throw new Error(`Groq ${resp.status}: ${txt.slice(0,120)}`);
+      }
+      const data=await resp.json();
+      return data.choices?.[0]?.message?.content||'';
+    }catch(e){
+      if(attempt===retries-1)throw e;
+      await sleep(2000);
+    }
+  }
+  throw new Error('Groq call failed after retries');
+}
+
+async function fetchPage(page,pageSize){
+  const resp=await fetch(`https://api.pokemontcg.io/v2/cards?page=${page}&pageSize=${pageSize}&orderBy=-set.releaseDate`);
+  if(!resp.ok)throw new Error(`TCG API ${resp.status}`);
+  const data=await resp.json();
+  return{cards:data.data||[],total:data.totalCount||0,pageCount:Math.ceil((data.totalCount||0)/pageSize)};
+}
+
+function extractTexts(cards){
+  const out=[];
+  for(const c of cards){
+    for(const a of(c.attacks||[])){
+      if(a.text&&a.text.trim().length>15)
+        out.push({card:c.name,set:c.set?.name||'',attack:a.name,text:a.text,damage:a.damage||'0',type:'attack'});
+    }
+    for(const ab of(c.abilities||[])){
+      if(ab.text&&ab.text.trim().length>15)
+        out.push({card:c.name,set:c.set?.name||'',attack:'[ability] '+ab.name,text:ab.text,damage:'0',type:'ability'});
+    }
+  }
+  return out;
+}
+
+const KNOWN_BASICS=new Set(['coin flip','paralyzed','asleep','poisoned','confused','burned','discard energy','draw cards','heal self','damage','badly poisoned']);
+
+async function parseBatch(key,model,batch){
+  const condensed=batch.map((a,i)=>`${i+1}. [${a.card}/${a.set}] "${a.attack}" (${a.damage}dmg): ${a.text}`).join('\n');
+  const raw=await groqCall(key,model,[
+    {role:'system',content:'You are a Pokémon TCG game engine developer. Output ONLY valid JSON arrays. No markdown, no explanation, no code fences.'},
+    {role:'user',content:`Analyze these Pokémon TCG attack/ability texts. Find mechanics that are NOT already in this list: ${[...KNOWN_BASICS].join(', ')}.
+
+For each NEW mechanic output a JSON object in an array:
+{"mechanic":"short name","cardName":"card","attackName":"attack name","description":"1-sentence what it does","engineCode":"function resolveCustomMechanic(attack,attacker,defender,ps,opp,log){const extraLog=[];let damage=attack.damageValue||0;/* implement here */return{damage,ps,opp,extraLog};}","animHint":"brief animation hint"}
+
+Texts:
+${condensed}
+
+Respond ONLY with a JSON array (can be empty []). No other text.`}
+  ]);
+  try{
+    const c=raw.replace(/```json|```/g,'').trim();
+    const s=c.indexOf('['),e=c.lastIndexOf(']');
+    if(s===-1)return[];
+    const arr=JSON.parse(c.slice(s,e+1));
+    return Array.isArray(arr)?arr:[];
+  }catch{return[]}
+}
+
+function testMechanic(m){
+  const code=m.engineCode||'';
+  const tests=[
+    ['has function name',()=>code.includes('resolveCustomMechanic')],
+    ['has return statement',()=>code.includes('return')],
+    ['returns extraLog',()=>code.includes('extraLog')],
+    ['has damage var',()=>code.includes('damage')],
+    ['has ps/opp',()=>code.includes('ps')&&code.includes('opp')],
+    ['no syntax error',()=>{try{new Function('"use strict";'+code.replace(/^function /,'var _f = function '));return true}catch{return false}}],
+  ];
+  const pass=[],fail=[];
+  for(const[name,fn]of tests){try{(fn()?pass:fail).push(name)}catch{fail.push(name)}}
+  return{pass,fail};
+}
+
+function renderMechanic(m,silent=false){
+  const list=el('mechList');
+  const id='mi-'+m.mechanic.replace(/\W+/g,'-');
+  if(el(id))return;
+  const div=document.createElement('div');
+  div.className='mi';div.id=id;
+  const tr=m.testPass!=null?(m.testFail===0?`<span class="tag t-ok">✓ ${m.testPass} tests</span>`:`<span class="tag t-fail">${m.testFail} fail</span>`)
+    :(m.engineCode?`<span class="tag t-code">code ready</span>`:`<span class="tag t-new">new</span>`);
+  div.innerHTML=`<div class="mn">${m.mechanic} ${tr}</div>
+<div class="mc">${m.cardName} — ${m.attackName}</div>
+<div class="mc" style="margin-top:2px">${m.description}</div>
+${m.engineCode?`<div class="mc2" onclick="this.classList.toggle('ex')">${m.engineCode.slice(0,180)}${m.engineCode.length>180?'…':''}</div>`:''}
+${m.animHint?`<div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">Anim: ${m.animHint}</div>`:''}`;
+  list.appendChild(div);
+  el('mechSec').style.display='';
+  el('mechCount').textContent=allMechanics.length;
+  if(!silent)list.scrollTop=list.scrollHeight;
+}
+
+function updateMechanicTag(m){
+  const id='mi-'+m.mechanic.replace(/\W+/g,'-');
+  const div=el(id);
+  if(!div)return;
+  const tag=div.querySelector('.tag');
+  if(!tag)return;
+  if(m.testFail===0){tag.className='tag t-ok';tag.textContent=`✓ ${m.testPass} tests`}
+  else{tag.className='tag t-fail';tag.textContent=`${m.testFail} fail`}
+}
+
+async function generateResolveAttackText(key,model,mechanics){
+  const cases=mechanics.filter(m=>m.engineCode).map(m=>{
+    const kw=(m.attackName||'').toLowerCase().replace(/[^a-z0-9]/g,'_').slice(0,40);
+    return `  // ${m.mechanic} — ${m.description}\n  if(attackKey==="${kw}"){\n    try{\n      ${m.engineCode.replace(/\n/g,'\n      ')}\n      return resolveCustomMechanic(attack,attacker,defender,ps,opp,log);\n    }catch(e){extraLog.push('[ERR:${m.mechanic}] '+e.message);}\n  }`;
+  }).join('\n\n');
+
+  const prompt=`Given these custom mechanic handler cases for Pokémon TCG attacks:
+${cases.slice(0,3000)}
+
+Write the complete resolveAttackText function that:
+1. Handles all the above custom cases first via attackKey lookup
+2. Then falls through to the existing basics (coin flips, paralysis, sleep, poison, confusion, burn, heal, discard energy, draw cards)
+3. Signature: function resolveAttackText(attack,attacker,defender,damage,ps,opp,log)
+4. Returns {damage,ps,opp,extraLog:[]}
+
+Output ONLY the complete function, no markdown, no explanation.`;
+
+  return await groqCall(key,model,[
+    {role:'system',content:'You are a Pokémon TCG game engine developer. Output only JavaScript function code, no markdown.'},
+    {role:'user',content:prompt}
+  ]);
+}
+
+function buildPatchFile(mechanics,resolveCode){
+  const fns=mechanics.filter(m=>m.engineCode).map(m=>`// ${m.mechanic} — ${m.description}\n// Card: ${m.cardName} | Attack: ${m.attackName}\n${m.engineCode}`).join('\n\n');
+  return`// ============================================================
+// AUTO-GENERATED MECHANIC PATCH — ${new Date().toISOString()}
+// Cards analyzed: ${st.tot} | Mechanics: ${mechanics.length}
+// Tests: ${st.pass} passed / ${st.fail} failed | Groq calls: ${st.groq}
+// ============================================================
+// USAGE: Replace resolveAttackText in gameEngine.js with the
+// function at the bottom of this file. Paste the handler
+// functions above it in the same file.
+// ============================================================
+
+${fns}
+
+// ============================================================
+// GENERATED resolveAttackText — replace in gameEngine.js
+// ============================================================
+${resolveCode||'// (generation failed — use individual handlers above)'}
+`;
+}
+
+async function runPipeline(fetchOnly=false){
+  const key=el('gKey').value.trim();
+  if(!key){log('Enter Groq API key first','err');return}
+  const model=el('mdl').value;
+  const pageSize=parseInt(el('cPP').value)||60;
+  const maxPages=parseInt(el('mPG').value)||999;
+  const delay=parseInt(el('dly').value)||4500;
+  const batchSz=parseInt(el('bSz').value)||6;
+
+  running=true;
+  el('runBtn').style.display='none';
+  el('fetchOnlyBtn').style.display='none';
+  el('stopBtn').style.display='';
+  el('saveBtn').style.display='';
+  el('ckptBanner').style.display='none';
+
+  try{
+    // Phase 1: fetch ALL cards
+    ph('fetch','active');
+    log(`Starting full card fetch (${pageSize}/page, max ${maxPages} pages, ${delay}ms delay)...`,'info');
+
+    let startPage=st.pg>0?st.pg+1:1;
+    let totalPages=maxPages;
+
+    if(startPage===1){
+      // Get first page to know total
+      prog(1,'Fetching page 1 to get total count...');
+      const first=await fetchPage(1,pageSize);
+      const texts=extractTexts(first.cards);
+      attackQueue.push(...texts);
+      incSt('tot',first.cards.length);
+      incSt('atk',texts.length);
+      incSt('pg');
+      totalPages=Math.min(first.pageCount,maxPages);
+      setSt('q',attackQueue.length);
+      log(`Page 1: ${first.cards.length} cards, ${texts.length} texts. Total pages: ${totalPages}`,'ok');
+      saveCheckpoint();
+      startPage=2;
+      if(!running)throw new Error('stopped');
+      await sleep(1000);
+    }
+
+    for(let p=startPage;p<=totalPages;p++){
+      if(!running)break;
+      try{
+        prog(Math.round((p/totalPages)*40),`Fetching page ${p}/${totalPages}...`);
+        const{cards}=await fetchPage(p,pageSize);
+        const texts=extractTexts(cards);
+        attackQueue.push(...texts);
+        incSt('tot',cards.length);
+        incSt('atk',texts.length);
+        incSt('pg');
+        setSt('q',attackQueue.length);
+        if(p%5===0){
+          log(`Page ${p}/${totalPages}: ${st.tot} cards, ${st.atk} attack texts total`,'info');
+          saveCheckpoint();
+        }
+        // Small pause between TCG API calls to be polite
+        await sleep(300);
+      }catch(e){
+        log(`Page ${p} fetch error: ${e.message} — retrying in 3s`,'warn');
+        await sleep(3000);
+        p--;
+      }
+    }
+
+    ph('fetch','done');
+    log(`Fetch complete: ${st.tot} cards, ${st.atk} attack texts, ${attackQueue.length} in queue`,'ok');
+
+    if(fetchOnly){
+      prog(40,`Fetched ${st.tot} cards. ${attackQueue.length} texts queued for analysis.`);
+      saveCheckpoint();
+      return;
+    }
+
+    // Phase 2: Parse mechanics
+    ph('parse','active');
+    const seen=new Set(allMechanics.map(m=>(m.mechanic||'').toLowerCase()));
+    let queueCopy=[...attackQueue];
+    attackQueue=[];
+    setSt('q',0);
+    let batchNum=0;
+    const totalBatches=Math.ceil(queueCopy.length/batchSz);
+    log(`Parsing ${queueCopy.length} texts in ${totalBatches} batches of ${batchSz} (${delay}ms between calls)...`,'info');
+
+    for(let i=0;i<queueCopy.length;i+=batchSz){
+      if(!running)break;
+      const batch=queueCopy.slice(i,i+batchSz);
+      batchNum++;
+      const pct=40+Math.round((batchNum/totalBatches)*30);
+      prog(pct,`Groq batch ${batchNum}/${totalBatches} (${delay/1000}s cooldown)...`);
+      try{
+        const found=await parseBatch(key,model,batch);
+        for(const m of found){
+          const k=(m.mechanic||'').toLowerCase();
+          if(!seen.has(k)){
+            seen.add(k);
+            allMechanics.push(m);
+            incSt('mech');
+            renderMechanic(m);
+            log(`✓ New mechanic: "${m.mechanic}" on ${m.cardName}`,'ok');
+          }
+        }
+        if(batchNum%5===0)saveCheckpoint();
+      }catch(e){
+        log(`Batch ${batchNum} error: ${e.message}`,'err');
+      }
+      if(i+batchSz<queueCopy.length){
+        // Countdown timer in log
+        const secs=Math.round(delay/1000);
+        for(let s=secs;s>0;s--){
+          if(!running)break;
+          el('pLbl').textContent=`Groq cooldown: ${s}s... (batch ${batchNum+1}/${totalBatches})`;
+          await sleep(1000);
+        }
+      }
+    }
+    ph('parse','done');
+    log(`Parse complete: ${allMechanics.length} unique mechanics found`,'ok');
+    saveCheckpoint();
+
+    // Phase 3: Generate animation/code
+    ph('gen','active');
+    log('Mechanics already have engine code from parse step. Validating...');
+    incSt('code',allMechanics.filter(m=>m.engineCode).length);
+    ph('gen','done');
+
+    // Phase 4: Test
+    ph('test','active');
+    log(`Running tests on ${allMechanics.length} mechanics...`,'info');
+    for(const m of allMechanics){
+      if(!running)break;
+      const r=testMechanic(m);
+      m.testPass=r.pass.length;m.testFail=r.fail.length;
+      incSt('pass',r.pass.length);incSt('fail',r.fail.length);
+      updateMechanicTag(m);
+      await sleep(20);
+    }
+    ph('test','done');
+    log(`Tests done: ${st.pass} passed, ${st.fail} failed`,'ok');
+
+    // Phase 5: Build resolveAttackText
+    ph('export','active');
+    prog(92,'Generating complete resolveAttackText function...');
+    log('Asking Groq to generate complete resolveAttackText()...','info');
+    await sleep(delay);
+    let resolveCode='';
+    try{
+      resolveCode=await generateResolveAttackText(key,model,allMechanics);
+      log('resolveAttackText() generated successfully','ok');
+    }catch(e){
+      log('resolveAttackText generation error: '+e.message+' — patch still has individual handlers','warn');
+    }
+
+    const patch=buildPatchFile(allMechanics,resolveCode);
+    el('expArea').textContent=patch;
+    el('expSec').style.display='';
+    el('copyBtn').onclick=()=>navigator.clipboard.writeText(patch).then(()=>log('Copied!','ok'));
+    el('dlBtn').onclick=()=>{
+      const b=new Blob([patch],{type:'text/javascript'});
+      const a=document.createElement('a');a.href=URL.createObjectURL(b);
+      a.download='gameEngine_mechanic_patch_'+Date.now()+'.js';a.click();
+    };
+    ph('export','done');
+    prog(100,`Done! ${allMechanics.length} mechanics, ${st.groq} Groq calls, ${st.rate} rate limits hit.`);
+    log(`Pipeline complete. Download or copy the patch above.`,'ok');
+    clearCheckpoint();
+
+  }catch(e){
+    if(e.message!=='stopped'){log('Pipeline error: '+e.message,'err');saveCheckpoint();}
+    else{log('Stopped by user. Checkpoint saved.','warn');saveCheckpoint();}
+    prog(0,'Error or stopped — checkpoint saved, click Resume to continue');
+  }finally{
+    running=false;
+    el('runBtn').style.display='';
+    el('fetchOnlyBtn').style.display='';
+    el('stopBtn').style.display='none';
+    checkForCheckpoint();
+  }
+}
+
+el('runBtn').onclick=()=>runPipeline(false);
+el('fetchOnlyBtn').onclick=()=>runPipeline(true);
+el('stopBtn').onclick=()=>{running=false};
+el('saveBtn').onclick=()=>saveCheckpoint();
+el('clearBtn').onclick=()=>{
+  clearCheckpoint();
+  el('logBox').innerHTML='';
+  el('mechList').innerHTML='';
+  el('mechSec').style.display='none';
+  el('expSec').style.display='none';
+  el('ckptBanner').style.display='none';
+  allMechanics=[];attackQueue=[];
+  ['tot','pg','atk','mech','code','pass','fail','groq','rate','q'].forEach(k=>setSt(k,0));
+  prog(0,'Ready');
+  ['fetch','parse','gen','test','export'].forEach(p=>ph(p,''));
+  log('Cleared.','info');
+};
+el('resumeBtn').onclick=()=>{
+  if(!checkpoint)return;
+  restoreFromCheckpoint(checkpoint);
+  el('ckptBanner').style.display='none';
+  log('Ready to resume. Click Run full pipeline.','ok');
+};
+el('freshBtn').onclick=()=>{clearCheckpoint();el('ckptBanner').style.display='none';checkpoint=null;log('Starting fresh.','info')};
+
+checkForCheckpoint();
+log('Ready. Enter Groq key and click Run full pipeline.','info');
+log('Tip: 4500ms delay = ~13 Groq calls/min — safe for free tier. Increase if you see 429s.','info');
+</script>
